@@ -6,11 +6,13 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Amazon.TranscribeService;
 using Amazon.TranscribeService.Model;
+using AwsTranscribe.Models;
 using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Media;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -150,7 +152,7 @@ namespace AwsTranscribe
 
             while (jobData.TranscriptionJob.TranscriptionJobStatus != TranscriptionJobStatus.COMPLETED)
             {
-                Task.Delay(2000);
+                Thread.Sleep(1000);
 
                 jobData = _transcribeClient.GetTranscriptionJobAsync(jobStatus).Result;
 
@@ -167,21 +169,29 @@ namespace AwsTranscribe
         {
             try
             {
-                //AmazonS3Client s3Client = new AmazonS3Client(_awsCredentials, _region);
+                AmazonS3Client s3Client = new AmazonS3Client(_awsCredentials, _region);
 
-                //TransferUtility fileTransferUtility = new TransferUtility(s3Client);                
+                TransferUtility fileTransferUtility = new TransferUtility(s3Client);
 
-                //string caminhoArquivoBaixado = Path.GetTempPath();
+                string tempFolder = Path.GetTempPath();
+                string extensionFile = ".json";
 
-                //fileTransferUtility.Download(@"C:\Users\Matheus\", AWS_S3_OUTPUT, nameFile + ".json");                                                
+                string fileOut = Path.Combine(tempFolder, nameFile, extensionFile);
 
-                //string arquivoLido = File.ReadAllText(caminhoArquivoBaixado + nameFile + ".json");                
+                fileTransferUtility.Download(fileOut, AWS_S3_OUTPUT, nameFile + extensionFile);
 
-                //richTextBox2.Clear();
-                //richTextBox2.AppendText(arquivoLido);
+                string fileContent;
+                using (StreamReader streamReader = File.OpenText(fileOut))
+                {
+                    fileContent = streamReader.ReadToEnd();
+                }
 
+                //
+                var jsonObj = JsonConvert.DeserializeObject<AWSJob>(fileContent);
+                string json = JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
 
-                richTextBox2.AppendText("Arquivo não lido");
+                richTextBox2.Clear();
+                richTextBox2.AppendText(json);
             }
             catch (AmazonS3Exception ex)
             {
