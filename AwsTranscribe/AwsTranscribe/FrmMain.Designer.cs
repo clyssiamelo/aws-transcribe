@@ -30,6 +30,7 @@ namespace AwsTranscribe
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.BtnPlay = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnRecord = new System.Windows.Forms.Button();
@@ -45,6 +46,7 @@ namespace AwsTranscribe
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.BtnPlay);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.btnStop);
             this.panel1.Controls.Add(this.btnRecord);
@@ -53,6 +55,17 @@ namespace AwsTranscribe
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(968, 72);
             this.panel1.TabIndex = 0;
+            // 
+            // BtnPlay
+            // 
+            this.BtnPlay.Enabled = false;
+            this.BtnPlay.Location = new System.Drawing.Point(366, 13);
+            this.BtnPlay.Name = "BtnPlay";
+            this.BtnPlay.Size = new System.Drawing.Size(98, 52);
+            this.BtnPlay.TabIndex = 2;
+            this.BtnPlay.Text = "Play";
+            this.BtnPlay.UseVisualStyleBackColor = true;
+            this.BtnPlay.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
             // 
@@ -65,6 +78,7 @@ namespace AwsTranscribe
             // 
             // btnStop
             // 
+            this.btnStop.Enabled = false;
             this.btnStop.Location = new System.Drawing.Point(244, 12);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(116, 53);
@@ -149,6 +163,7 @@ namespace AwsTranscribe
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.Button BtnPlay;
     }
 }
 

@@ -51,15 +51,18 @@ namespace AwsTranscribe
             mciSendString("record recsound", "", 0, 0);
             btnStop.Enabled = true;
             btnRecord.Enabled = false;
+            BtnPlay.Enabled = false;
         }
 
         private async void btnStop_Click(object sender, EventArgs e)
         {
+            
             mciSendString("save recsound " + _fileName, "", 0, 0);
             mciSendString("close recsound", "", 0, 0);
 
             btnStop.Enabled = false;
-            btnRecord.Enabled = true;
+            
+            BtnPlay.Enabled = true;
 
 
             GetCredentials();
@@ -67,13 +70,9 @@ namespace AwsTranscribe
             await UploadToS3(_fileName);
 
             await ExecuteTranscribe();
+            btnRecord.Enabled = true;
         }
 
-        //private void btnOpen_Click(object sender, EventArgs e)
-        //{
-        //    SoundPlayer soundPlayer = new SoundPlayer(_fileName);
-        //    soundPlayer.Play();
-        //}
 
         private async Task<bool> UploadToS3(string file)
         {
@@ -221,6 +220,14 @@ namespace AwsTranscribe
             {
                 GetFileS3(transcriptionJob.TranscriptionJobName);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            btnStop.Enabled = false;
+            btnRecord.Enabled = true;
+            SoundPlayer soundPlayer = new SoundPlayer(_fileName);
+            soundPlayer.Play();
         }
     }
 }
